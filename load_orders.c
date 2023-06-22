@@ -113,7 +113,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
             letters = 0;
             spaces = 0;
 
-            /*if ((strcmp(training_unit_affilitation, "0") == 0) && (strcmp(training_unit_type, "0") == 0))
+            if ((strcmp(training_unit_affilitation, "0") == 0) && (strcmp(training_unit_type, "0") == 0))
             {
                 continue;
             }
@@ -131,7 +131,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
                 a[training_unit_id].current_stamina = training_unit_stamina;
                 a[training_unit_id].training_time = training_time_left;
                 base_busy = 0;
-            }*/
+            }
         }
     }
 
