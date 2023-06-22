@@ -6,7 +6,7 @@
 //#define MAP_SIZE_X 32
 //#define MAP_SIZE_Y 32
 
-const int opponents = 8;
+#define opponents 8
 
 /* attack arrays */
 int Knight[opponents] = { 35, 35, 35, 35, 35, 35, 35, 35 };
