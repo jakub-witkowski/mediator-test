@@ -9,13 +9,13 @@
 const int opponents = 8;
 
 /* attack arrays */
-int K[opponents] = { 35, 35, 35, 35, 35, 35, 35, 35 };
-int S[opponents] = { 30, 30, 30, 20, 20, 30, 30, 30 };
-int A[opponents] = { 15, 15, 15, 15, 10, 10, 15, 15 };
-int P[opponents] = { 35, 15, 15, 15, 15, 10, 15, 10 };
-int C[opponents] = { 40, 40, 40, 40, 40, 40, 40, 50 };
-int R[opponents] = { 10, 10, 10, 10, 10, 10, 10, 50 };
-int W[opponents] = { 5, 5, 5, 5, 5, 5, 5, 1 };
+int Knight[opponents] = { 35, 35, 35, 35, 35, 35, 35, 35 };
+int Swordsman[opponents] = { 30, 30, 30, 20, 20, 30, 30, 30 };
+int Archer[opponents] = { 15, 15, 15, 15, 10, 10, 15, 15 };
+int Pikeman[opponents] = { 35, 15, 15, 15, 15, 10, 15, 10 };
+int Catapult[opponents] = { 40, 40, 40, 40, 40, 40, 40, 50 };
+int Ram[opponents] = { 10, 10, 10, 10, 10, 10, 10, 50 };
+int Worker[opponents] = { 5, 5, 5, 5, 5, 5, 5, 1 };
 
 /* aliases for array indices  */
 const int vs_K = 0;
@@ -127,37 +127,37 @@ void load_orders(char fname[], au a[])
             if (strcmp(a[id].unit_type, "K") == 0)
             {
                 //int attacker[] = { 35, 35, 35, 35, 35, 35, 35, 35 };
-                attacker = K;
+                attacker = Knight;
             }
             else if (strcmp(a[id].unit_type, "S") == 0)
             {
                 //int attacker[] = { 30, 30, 30, 20, 20, 30, 30, 30 };
-                attacker = S;
+                attacker = Swordsman;
             }
             else if (strcmp(a[id].unit_type, "A") == 0)
             {
                 //int attacker[] = { 15, 15, 15, 15, 10, 10, 15, 15 };
-                attacker = A;
+                attacker = Archer;
             }
             else if (strcmp(a[id].unit_type, "P") == 0)
             {
                 //int attacker[] = { 35, 15, 15, 15, 15, 10, 15, 10 };
-                attacker = P;
+                attacker = Pikeman;
             }
             else if (strcmp(a[id].unit_type, "C") == 0)
             {
                 //int attacker[] = { 40, 40, 40, 40, 40, 40, 40, 50 };
-                attacker = C;
+                attacker = Catapult;
             }
             else if (strcmp(a[id].unit_type, "R") == 0)
             {
                 //int attacker[] = { 10, 10, 10, 10, 10, 10, 10, 50 };
-                attacker = R;
+                attacker = Ram;
             }
             else if (strcmp(a[id].unit_type, "W") == 0)
             {
                 //int attacker[] = { 5, 5, 5, 5, 5, 5, 5, 1 };
-                attacker = W;
+                attacker = Worker;
             }
 
             if (strcmp(a[target_id].unit_type, "K") == 0)
