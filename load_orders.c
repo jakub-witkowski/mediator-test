@@ -61,7 +61,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[])
     int training_time_left;
     int base_busy = 0;
     char* action;
-    char* type;
+    char type[2];
     int* attacker;
     //int attacker[8];
     //int versus = 0;
@@ -111,7 +111,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[])
             letters = 0;
             spaces = 0;
 
-            if ((strcmp(training_unit_affilitation, "0") == 0) && (strcmp(training_unit_type, "0") == 0))
+            /*if ((strcmp(training_unit_affilitation, "0") == 0) && (strcmp(training_unit_type, "0") == 0))
             {
                 continue;
             }
@@ -129,7 +129,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[])
                 a[training_unit_id].current_stamina = training_unit_stamina;
                 a[training_unit_id].training_time = training_time_left;
                 base_busy = 0;
-            }
+            }*/
         }
     }
 
@@ -159,10 +159,13 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[])
         {
             sscanf(order, "%d B %s", &id, type);
             printf("Read base id: %d and training unit type: %s\n", id, type);
+            printf("Czy to tu?\n");
             letters = 0;
             spaces = 0;
         }
         
+        printf("Po bazach\n");
+
         if (letters == 1 && spaces == 3)
         {
             sscanf(order, "%d M %d %d", &id, &x, &y);
@@ -176,6 +179,8 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[])
             printf("%s %s %d %d %d %d\n", a[id].affiliation, a[id].unit_type, a[id].unit_id, a[id].x_coord, a[id].y_coord, a[id].current_stamina);
         }
         
+        printf("Po ruchach\n");
+
         if (letters == 1 && spaces == 2)
         {
             sscanf(order, "%d A %d", &id, &target_id);
@@ -269,6 +274,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[])
             printf("%s %s %d %d %d %d\n", a[target_id].affiliation, a[target_id].unit_type, a[target_id].unit_id, a[target_id].x_coord, a[target_id].y_coord, a[target_id].current_stamina);
         }    
         
+        printf("Po walkach\n");
 
         //letters = 0;
         //spaces = 0;
