@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
+#include <stdlib.h>
 
 //#define MAP_SIZE_X 32
 //#define MAP_SIZE_Y 32
@@ -192,6 +193,8 @@ void load_orders(char fname[], au a[])
             printf("%s %s %d %d %d %d\n", a[target_id].affiliation, a[target_id].unit_type, a[target_id].unit_id, a[target_id].x_coord, a[target_id].y_coord, a[target_id].current_stamina);
         }    
         
+        free(attacker);
+        //free(order);
         //letters = 0;
         //spaces = 0;
         count++;
