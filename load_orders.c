@@ -6,16 +6,16 @@
 //#define MAP_SIZE_X 32
 //#define MAP_SIZE_Y 32
 
-#define opponents 8
+#define OPPONENTS 8
 
 /* attack arrays */
-int Knight[opponents] = { 35, 35, 35, 35, 35, 35, 35, 35 };
-int Swordsman[opponents] = { 30, 30, 30, 20, 20, 30, 30, 30 };
-int Archer[opponents] = { 15, 15, 15, 15, 10, 10, 15, 15 };
-int Pikeman[opponents] = { 35, 15, 15, 15, 15, 10, 15, 10 };
-int Catapult[opponents] = { 40, 40, 40, 40, 40, 40, 40, 50 };
-int Ram[opponents] = { 10, 10, 10, 10, 10, 10, 10, 50 };
-int Worker[opponents] = { 5, 5, 5, 5, 5, 5, 5, 1 };
+int knight[OPPONENTS] = { 35, 35, 35, 35, 35, 35, 35, 35 };
+int swordsman[OPPONENTS] = { 30, 30, 30, 20, 20, 30, 30, 30 };
+int archer[OPPONENTS] = { 15, 15, 15, 15, 10, 10, 15, 15 };
+int pikeman[OPPONENTS] = { 35, 15, 15, 15, 15, 10, 15, 10 };
+int catapult[OPPONENTS] = { 40, 40, 40, 40, 40, 40, 40, 50 };
+int ram[OPPONENTS] = { 10, 10, 10, 10, 10, 10, 10, 50 };
+int worker[OPPONENTS] = { 5, 5, 5, 5, 5, 5, 5, 1 };
 
 /* aliases for array indices  */
 const int vs_K = 0;
@@ -45,40 +45,22 @@ void load_orders(char fname[], au a[])
     /* variables used to store data read from rozkazy.txt */
     int letters = 0;
     int spaces = 0;
-    int id;
+    int count = 0;
+    int id = -1;
     const int length = 24;
     char order[length];
     char* action;
-    char* type;
+    char* type = "";
     int* attacker;
     //int attacker[8];
     int versus = 0;
-    int x;
-    int y;
+    int x = -1;
+    int y = -1;
     int target_id;
 
     FILE * fptr;
 
     fptr = fopen(fname, "r");
-    
-    /* getting number of lines in rozkazy.txt
-    int line_count = 0;
-    char c;
-        
-    for (c = getc(fptr); c != EOF; c = getc(fptr))
-        if (c == '\n')
-            line_count++;
-
-    going back to the beginning of the file
-    rewind(fptr);  */
-    
-
-        //printf("Letters: %d, Spaces: %d.\n" , letters, spaces);
-
-        int count = 0;
-    /*    int train = 0;
-        int move = 0;
-        int attack = 0;*/
 
     while (fgets(order, length, fptr) != NULL)
     {
@@ -127,37 +109,37 @@ void load_orders(char fname[], au a[])
             if (strcmp(a[id].unit_type, "K") == 0)
             {
                 //int attacker[] = { 35, 35, 35, 35, 35, 35, 35, 35 };
-                attacker = Knight;
+                attacker = knight;
             }
             else if (strcmp(a[id].unit_type, "S") == 0)
             {
                 //int attacker[] = { 30, 30, 30, 20, 20, 30, 30, 30 };
-                attacker = Swordsman;
+                attacker = swordsman;
             }
             else if (strcmp(a[id].unit_type, "A") == 0)
             {
                 //int attacker[] = { 15, 15, 15, 15, 10, 10, 15, 15 };
-                attacker = Archer;
+                attacker = archer;
             }
             else if (strcmp(a[id].unit_type, "P") == 0)
             {
                 //int attacker[] = { 35, 15, 15, 15, 15, 10, 15, 10 };
-                attacker = Pikeman;
+                attacker = pikeman;
             }
             else if (strcmp(a[id].unit_type, "C") == 0)
             {
                 //int attacker[] = { 40, 40, 40, 40, 40, 40, 40, 50 };
-                attacker = Catapult;
+                attacker = catapult;
             }
             else if (strcmp(a[id].unit_type, "R") == 0)
             {
                 //int attacker[] = { 10, 10, 10, 10, 10, 10, 10, 50 };
-                attacker = Ram;
+                attacker = ram;
             }
             else if (strcmp(a[id].unit_type, "W") == 0)
             {
                 //int attacker[] = { 5, 5, 5, 5, 5, 5, 5, 1 };
-                attacker = Worker;
+                attacker = worker;
             }
 
             if (strcmp(a[target_id].unit_type, "K") == 0)
