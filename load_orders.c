@@ -100,7 +100,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
         if (letters == 0 && digits >= 1 && spaces == 0)
         {
             sscanf(player_input, "%ld", &gold);
-            //printf("Read gold: %ld\n", gold);
+            printf("Read gold: %ld\n", gold);
             letters = 0;
             digits = 0;
             spaces = 0;
@@ -109,7 +109,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
         if (spaces == 6)
         {
             sscanf(player_input, "%s %s %d %d %d %d %d", training_unit_affilitation, training_unit_type, &training_unit_id, &training_unit_x, &training_unit_y, &training_unit_stamina, &training_time_left);
-            //printf("Read aff: %s, type: %s, id: %d, x: %d, y: %d, stamina: %d, training time left: %d\n", training_unit_affilitation, training_unit_type, training_unit_id, training_unit_x, training_unit_y, training_unit_stamina, training_time_left);
+            printf("Read aff: %s, type: %s, id: %d, x: %d, y: %d, stamina: %d, training time left: %d\n", training_unit_affilitation, training_unit_type, training_unit_id, training_unit_x, training_unit_y, training_unit_stamina, training_time_left);
             letters = 0;
             spaces = 0;
 
@@ -143,7 +143,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
 
     while (fgets(order, length, fptr1) != NULL)
     {
-        //printf("%s", order);
+        printf("%s", order);
 
         for (int i = 0; order[i] != '\n'; i++)
         {
@@ -160,33 +160,33 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
         if (letters == 2)
         {
             sscanf(order, "%d B %s", &id, type);
-            //printf("Read base id: %d and training unit type: %s\n", id, type);
-            //printf("Czy to tu?\n");
+            printf("Read base id: %d and training unit type: %s\n", id, type);
+            printf("Czy to tu?\n");
             letters = 0;
             spaces = 0;
         }
         
-        //printf("Po bazach\n");
+        printf("Po bazach\n");
 
         if (letters == 1 && spaces == 3)
         {
             sscanf(order, "%d M %d %d", &id, &x, &y);
-            //printf("Read id: %d and coords: x: %d y: %d\n", id, x, y);
+            printf("Read id: %d and coords: x: %d y: %d\n", id, x, y);
             letters = 0;
             spaces = 0;
 
             a[id].x_coord = x;
             a[id].y_coord = y;
 
-            //printf("%s %s %d %d %d %d\n", a[id].affiliation, a[id].unit_type, a[id].unit_id, a[id].x_coord, a[id].y_coord, a[id].current_stamina);
+            printf("%s %s %d %d %d %d\n", a[id].affiliation, a[id].unit_type, a[id].unit_id, a[id].x_coord, a[id].y_coord, a[id].current_stamina);
         }
         
-        //printf("Po ruchach\n");
+        printf("Po ruchach\n");
 
         if (letters == 1 && spaces == 2)
         {
             sscanf(order, "%d A %d", &id, &target_id);
-            //printf("Read id: %d and target id: %d\n", id, target_id);
+            printf("Read id: %d and target id: %d\n", id, target_id);
             letters = 0;
             spaces = 0;
 
@@ -292,13 +292,13 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
             //printf("%s %s %d %d %d %d\n", a[target_id].affiliation, a[target_id].unit_type, a[target_id].unit_id, a[target_id].x_coord, a[target_id].y_coord, a[target_id].current_stamina);
         }    
         
-        //printf("Po walkach\n");
+        printf("Po walkach\n");
 
         //letters = 0;
         //spaces = 0;
         count++;
     }
-    //printf("Count: %d\n", count);
+    printf("Count: %d\n", count);
 
     fclose(fptr1);
 
@@ -315,6 +315,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
     {
         fprintf(stderr, "unable to write bank status\n");
     }
+    printf("Gold saved.\n");
 
     /* Save base and unit data */
     for (int i = 0; i < *u; i++)
@@ -338,6 +339,6 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
             }
         }
     }
-
+    printf("Units saved.\n");
     fclose(fptr2);
 }
