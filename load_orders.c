@@ -270,12 +270,17 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
             if ((strcmp(a[target_id].unit_type, "B") == 0) && a[target_id].current_stamina <= 0)
             {
                 if (strcmp(a[target_id].affiliation, "P") == 0)
-                    strcpy(message, "Player 1");
+                {
+                    printf("Player 1 loses the base, game over.\n");
+                    exit(0);
+                }
+                    //strcpy(message, "Player 1");
                 if (strcmp(a[target_id].affiliation, "E") == 0)
-                    strcpy(message, "Player 2");
-            
-                printf("%s loses the base, game over.\n", message);
-                exit(0);
+                {
+                    printf("Player 2 loses the base, game over.\n");
+                    exit(0);
+                }
+                    //strcpy(message, "Player 2");
             }
 
             if (a[target_id].current_stamina <= 0)
