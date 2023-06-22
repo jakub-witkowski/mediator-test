@@ -2,7 +2,6 @@
 #include <unistd.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdlib.h>
 
 //#define MAP_SIZE_X 32
 //#define MAP_SIZE_Y 32
@@ -41,29 +40,106 @@ typedef struct {
     int training_time;
 } au;
 
-void load_orders(char fname[], au a[])
+void load_orders(char fname[], au a[], char fname1[], char fname2[])
 {
     /* variables used to store data read from rozkazy.txt */
     int letters = 0;
     int spaces = 0;
+    int digits = 0;
     int count = 0;
-    int id = -1;
+    int id;
     const int length = 24;
     char order[length];
+    char player_input[length];
+    long gold = 0;
+    char training_unit_affilitation[2];
+    char training_unit_type[2];
+    int training_unit_id;
+    int training_unit_x;
+    int training_unit_y;
+    int training_unit_stamina;
+    int training_time_left;
+    int base_busy = 0;
     char* action;
-    char* type = "";
+    char* type;
     int* attacker;
     //int attacker[8];
-    int versus = 0;
-    int x = -1;
-    int y = -1;
+    //int versus = 0;
+    int x;
+    int y;
     int target_id;
 
-    FILE * fptr;
+    FILE * fptr; // input: player file
+    FILE * fptr1; // input file: rozkazy.txt
+    FILE * fptr2; // directing output into status.txt
 
     fptr = fopen(fname, "r");
+    if (!fptr)
+        printf("Cannot find %s\n", fname);
 
-    while (fgets(order, length, fptr) != NULL)
+    while (fgets(player_input, length, fptr) != NULL)
+    {
+        for (int i = 0; player_input[i] != '\n'; i++)  
+        {
+            if (isupper(player_input[i]))
+            {
+                letters++;
+            }
+            if (isdigit(player_input[i]))
+            {
+                digits++;
+            }
+            if (isblank(player_input[i]))
+            {
+                spaces++;
+            }         
+        }
+
+        if (letters == 0 && digits >= 1 && spaces == 0)
+        {
+            sscanf(player_input, "%ld", &gold);
+            printf("Read gold: %ld\n", gold);
+            letters = 0;
+            digits = 0;
+            spaces = 0;
+        }
+
+        if (spaces == 6)
+        {
+            sscanf(player_input, "%s %s %d %d %d %d %d", training_unit_affilitation, training_unit_type, &training_unit_id, &training_unit_x, &training_unit_y, &training_unit_stamina, &training_time_left);
+            printf("Read aff: %s, type: %s, id: %d, x: %d, y: %d, stamina: %d, training time left: %d\n", training_unit_affilitation, training_unit_type, training_unit_id, training_unit_x, training_unit_y, training_unit_stamina, training_time_left);
+            letters = 0;
+            spaces = 0;
+
+            if ((strcmp(training_unit_affilitation, "0") == 0) && (strcmp(training_unit_type, "0") == 0))
+            {
+                continue;
+            }
+            if (((strcmp(training_unit_affilitation, "P") == 0) || (strcmp(training_unit_affilitation, "E") == 0)) && training_time_left > 0)
+            {
+                base_busy = 1;
+            }
+            if (((strcmp(training_unit_affilitation, "P") == 0) || (strcmp(training_unit_affilitation, "E") == 0)) && training_time_left == 0)
+            {
+                strcpy(a[training_unit_id].affiliation, training_unit_affilitation);
+                strcpy(a[training_unit_id].unit_type, training_unit_type);
+                a[training_unit_id].unit_id = training_unit_id;
+                a[training_unit_id].x_coord = training_unit_x;
+                a[training_unit_id].y_coord = training_unit_y;
+                a[training_unit_id].current_stamina = training_unit_stamina;
+                a[training_unit_id].training_time = training_time_left;
+                base_busy = 0;
+            }
+        }
+    }
+
+    fclose(fptr);
+
+    fptr1 = fopen(fname1, "r");
+    if (!fptr1)
+        printf("Cannot find %s\n", fname1);
+
+    while (fgets(order, length, fptr1) != NULL)
     {
         printf("%s", order);
 
@@ -193,13 +269,12 @@ void load_orders(char fname[], au a[])
             printf("%s %s %d %d %d %d\n", a[target_id].affiliation, a[target_id].unit_type, a[target_id].unit_id, a[target_id].x_coord, a[target_id].y_coord, a[target_id].current_stamina);
         }    
         
-        free(attacker);
-        //free(order);
+
         //letters = 0;
         //spaces = 0;
         count++;
     }
     printf("Count: %d\n", count);
 
-fclose(fptr);
+fclose(fptr1);
 }
