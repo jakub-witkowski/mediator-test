@@ -318,24 +318,24 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
     printf("Gold saved.\n");
 
     /* Save base and unit data */
-    for (int i = 0; i < *u; i++)
+    for (int j = 0; j < *u; j++)
     {
-        if (a[i].current_stamina == -1)
+        if (a[j].current_stamina == -1)
         {
             printf("Przeskok.\n");
             continue;
         }
-        if (strcmp(a[i].unit_type, "B") == 0)
+        if (strcmp(a[j].unit_type, "B") == 0)
         {
-            if (fprintf(fptr2, "%s %s %d %d %d %d %s\n", a[i].affiliation, a[i].unit_type, a[i].unit_id, a[i].x_coord, a[i].y_coord, a[i].current_stamina, a[i].is_base_busy) < 0)
+            if (fprintf(fptr2, "%s %s %d %d %d %d %s\n", a[j].affiliation, a[j].unit_type, a[j].unit_id, a[j].x_coord, a[j].y_coord, a[j].current_stamina, a[j].is_base_busy) < 0)
             {
                 fprintf(stderr, "unable to write base data\n");
             }
             printf("Base saved.\n");
         }
-        else if (strcmp(a[i].unit_type, "B") != 0)
+        else if (strcmp(a[j].unit_type, "B") != 0)
         {
-            if (fprintf(fptr2, "%s %s %d %d %d %d\n", a[i].affiliation, a[i].unit_type, a[i].unit_id, a[i].x_coord, a[i].y_coord, a[i].current_stamina) < 0)
+            if (fprintf(fptr2, "%s %s %d %d %d %d\n", a[j].affiliation, a[j].unit_type, a[j].unit_id, a[j].x_coord, a[j].y_coord, a[j].current_stamina) < 0)
             {
                 fprintf(stderr, "unable to write unit data\n");
             }
