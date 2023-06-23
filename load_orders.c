@@ -303,8 +303,8 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
     fclose(fptr1);
 
     fptr2 = fopen(fname2, "w");
-    if (!fptr1)
-        printf("Cannot find %s\n", fname1);
+    if (!fptr2)
+        printf("Cannot find %s\n", fname2);
 
     fclose(fptr2);
 
@@ -320,11 +320,13 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
     /* Save base and unit data */
     for (int j = 0; j < *u; j++)
     {
+        printf("Wchodzę do pętli\n");
         if (a[j].current_stamina == -1)
         {
             printf("Przeskok.\n");
             continue;
         }
+
         if (strcmp(a[j].unit_type, "B") == 0)
         {
             if (fprintf(fptr2, "%s %s %d %d %d %d %s\n", a[j].affiliation, a[j].unit_type, a[j].unit_id, a[j].x_coord, a[j].y_coord, a[j].current_stamina, a[j].is_base_busy) < 0)

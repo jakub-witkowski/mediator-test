@@ -23,7 +23,8 @@ int main()
 {
     /* analyze the results */
     load_status("status.txt", &units_on_the_map_counter, &gold, active_units); // read data from status.txt
-    load_orders("player1.txt", active_units, "rozkazy.txt", "status.txt"); // read data from rozkazy.txt and player1.txt, analyze and write to status.txt
+    printf("Units on the map counter: %d\n", units_on_the_map_counter);
+    load_orders("player1.txt", active_units, "rozkazy.txt", "status.txt", &units_on_the_map_counter); // read data from rozkazy.txt and player1.txt, analyze and write to status.txt
 
     return 0;
 }
