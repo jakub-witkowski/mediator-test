@@ -49,6 +49,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
     int digits = 0;
     int count = 0;
     int id;
+    int row_number;
     const int length = 24;
     char order[length];
     char player_input[length];
@@ -100,7 +101,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
         if (letters == 0 && digits >= 1 && spaces == 0)
         {
             sscanf(player_input, "%ld", &gold);
-            printf("Read gold: %ld\n", gold);
+            //printf("Read gold: %ld\n", gold);
             letters = 0;
             digits = 0;
             spaces = 0;
@@ -109,7 +110,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
         if (spaces == 6)
         {
             sscanf(player_input, "%s %s %d %d %d %d %d", training_unit_affilitation, training_unit_type, &training_unit_id, &training_unit_x, &training_unit_y, &training_unit_stamina, &training_time_left);
-            printf("Read aff: %s, type: %s, id: %d, x: %d, y: %d, stamina: %d, training time left: %d\n", training_unit_affilitation, training_unit_type, training_unit_id, training_unit_x, training_unit_y, training_unit_stamina, training_time_left);
+            //printf("Read aff: %s, type: %s, id: %d, x: %d, y: %d, stamina: %d, training time left: %d\n", training_unit_affilitation, training_unit_type, training_unit_id, training_unit_x, training_unit_y, training_unit_stamina, training_time_left);
             letters = 0;
             spaces = 0;
 
@@ -123,14 +124,24 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
             }
             if (((strcmp(training_unit_affilitation, "P") == 0) || (strcmp(training_unit_affilitation, "E") == 0)) && training_time_left == 0)
             {
-                strcpy(a[training_unit_id].affiliation, training_unit_affilitation);
+                strcpy(a[*u].affiliation, training_unit_affilitation);
+                strcpy(a[*u].unit_type, training_unit_type);
+                a[*u].unit_id = training_unit_id;
+                a[*u].x_coord = training_unit_x;
+                a[*u].y_coord = training_unit_y;
+                a[*u].current_stamina = training_unit_stamina;
+                a[*u].training_time = training_time_left;
+                *u++;
+                base_busy = 0;
+
+                /*strcpy(a[training_unit_id].affiliation, training_unit_affilitation);
                 strcpy(a[training_unit_id].unit_type, training_unit_type);
                 a[training_unit_id].unit_id = training_unit_id;
                 a[training_unit_id].x_coord = training_unit_x;
                 a[training_unit_id].y_coord = training_unit_y;
                 a[training_unit_id].current_stamina = training_unit_stamina;
                 a[training_unit_id].training_time = training_time_left;
-                base_busy = 0;
+                base_busy = 0;*/
             }
         }
     }
@@ -143,7 +154,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
 
     while (fgets(order, length, fptr1) != NULL)
     {
-        printf("%s", order);
+        //printf("%s", order);
 
         for (int i = 0; order[i] != '\n'; i++)
         {
@@ -160,145 +171,172 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
         if (letters == 2)
         {
             sscanf(order, "%d B %s", &id, type);
-            printf("Read base id: %d and training unit type: %s\n", id, type);
-            printf("Czy to tu?\n");
+            //printf("Read base id: %d and training unit type: %s\n", id, type);
+            //printf("Czy to tu?\n");
             letters = 0;
             spaces = 0;
         }
         
-        printf("Po bazach\n");
+        //printf("Po bazach\n");
 
         if (letters == 1 && spaces == 3)
         {
             sscanf(order, "%d M %d %d", &id, &x, &y);
-            printf("Read id: %d and coords: x: %d y: %d\n", id, x, y);
+            //printf("Read id: %d and coords: x: %d y: %d\n", id, x, y);
             letters = 0;
             spaces = 0;
 
-            a[id].x_coord = x;
-            a[id].y_coord = y;
+            /* select proper row in case there is a mismatch between active_units row numbering and id of a unit */
+            for (int k = 0; k < *u; k++)
+            {
+                if (a[k].unit_id == id)
+                    row_number = k;
+                else
+                    continue;
+            }
 
-            printf("%s %s %d %d %d %d\n", a[id].affiliation, a[id].unit_type, a[id].unit_id, a[id].x_coord, a[id].y_coord, a[id].current_stamina);
+            a[row_number].x_coord = x;
+            a[row_number].y_coord = y;
+
+            //printf("%s %s %d %d %d %d\n", a[id].affiliation, a[id].unit_type, a[id].unit_id, a[id].x_coord, a[id].y_coord, a[id].current_stamina);
         }
         
-        printf("Po ruchach\n");
+        //printf("Po ruchach\n");
 
         if (letters == 1 && spaces == 2)
         {
             sscanf(order, "%d A %d", &id, &target_id);
-            printf("Read id: %d and target id: %d\n", id, target_id);
+            //printf("Read id: %d and target id: %d\n", id, target_id);
             letters = 0;
             spaces = 0;
 
-            if (strcmp(a[id].unit_type, "K") == 0)
+            /* select proper row in case there is a mismatch between active_units row numbering and id of a unit */
+            for (int m = 0; m < *u; m++)
+            {
+                if (a[m].unit_id == id)
+                    row_number = m;
+                else
+                    continue;
+            }
+
+            if (strcmp(a[row_number].unit_type, "K") == 0)
             {
                 //int attacker[] = { 35, 35, 35, 35, 35, 35, 35, 35 };
                 attacker = knight;
             }
-            else if (strcmp(a[id].unit_type, "S") == 0)
+            else if (strcmp(a[row_number].unit_type, "S") == 0)
             {
                 //int attacker[] = { 30, 30, 30, 20, 20, 30, 30, 30 };
                 attacker = swordsman;
             }
-            else if (strcmp(a[id].unit_type, "A") == 0)
+            else if (strcmp(a[row_number].unit_type, "A") == 0)
             {
                 //int attacker[] = { 15, 15, 15, 15, 10, 10, 15, 15 };
                 attacker = archer;
             }
-            else if (strcmp(a[id].unit_type, "P") == 0)
+            else if (strcmp(a[row_number].unit_type, "P") == 0)
             {
                 //int attacker[] = { 35, 15, 15, 15, 15, 10, 15, 10 };
                 attacker = pikeman;
             }
-            else if (strcmp(a[id].unit_type, "C") == 0)
+            else if (strcmp(a[row_number].unit_type, "C") == 0)
             {
                 //int attacker[] = { 40, 40, 40, 40, 40, 40, 40, 50 };
                 attacker = catapult;
             }
-            else if (strcmp(a[id].unit_type, "R") == 0)
+            else if (strcmp(a[row_number].unit_type, "R") == 0)
             {
                 //int attacker[] = { 10, 10, 10, 10, 10, 10, 10, 50 };
                 attacker = ram;
             }
-            else if (strcmp(a[id].unit_type, "W") == 0)
+            else if (strcmp(a[row_number].unit_type, "W") == 0)
             {
                 //int attacker[] = { 5, 5, 5, 5, 5, 5, 5, 1 };
                 attacker = worker;
             }
 
-            if (strcmp(a[target_id].unit_type, "K") == 0)
+            /* select proper row in case there is a mismatch between active_units row numbering and id of a unit */
+            for (int n = 0; n < *u; n++)
+            {
+                if (a[n].unit_id == target_id)
+                    row_number = n;
+                else
+                    continue;
+            }
+
+            if (strcmp(a[row_number].unit_type, "K") == 0)
             {
                 //printf("Damage dealt: %d \n", attacker[vs_K]);
-                a[target_id].current_stamina -= attacker[vs_K];
+                a[row_number].current_stamina -= attacker[vs_K];
             }
-            else if (strcmp(a[target_id].unit_type, "S") == 0)
+            else if (strcmp(a[row_number].unit_type, "S") == 0)
             {
                 //printf("Damage dealt: %d \n", attacker[vs_S]);
-                a[target_id].current_stamina -= attacker[vs_S];
+                a[row_number].current_stamina -= attacker[vs_S];
             }
-            else if (strcmp(a[target_id].unit_type, "A") == 0)
+            else if (strcmp(a[row_number].unit_type, "A") == 0)
             {
                 //printf("Damage dealt: %d \n", attacker[vs_A]);
-                a[target_id].current_stamina -= attacker[vs_A];
+                a[row_number].current_stamina -= attacker[vs_A];
             }
-            else if (strcmp(a[target_id].unit_type, "P") == 0)
+            else if (strcmp(a[row_number].unit_type, "P") == 0)
             {
                 //printf("Damage dealt: %d \n", attacker[vs_P]);
-                a[target_id].current_stamina -= attacker[vs_P];
+                a[row_number].current_stamina -= attacker[vs_P];
             }
-            else if (strcmp(a[target_id].unit_type, "C") == 0)
+            else if (strcmp(a[row_number].unit_type, "C") == 0)
             {
                 //printf("Damage dealt: %d \n", attacker[vs_C]);
-                a[target_id].current_stamina -= attacker[vs_C];
+                a[row_number].current_stamina -= attacker[vs_C];
             }
-            else if (strcmp(a[target_id].unit_type, "R") == 0)
+            else if (strcmp(a[row_number].unit_type, "R") == 0)
             {
                 //printf("Damage dealt: %d \n", attacker[vs_R]);
-                a[target_id].current_stamina -= attacker[vs_R];
+                a[row_number].current_stamina -= attacker[vs_R];
             }
-            else if (strcmp(a[target_id].unit_type, "W") == 0)
+            else if (strcmp(a[row_number].unit_type, "W") == 0)
             {
                 //printf("Damage dealt: %d \n", attacker[vs_W]);
-                a[target_id].current_stamina -= attacker[vs_W];
+                a[row_number].current_stamina -= attacker[vs_W];
             }
-            else if (strcmp(a[target_id].unit_type, "B") == 0)
+            else if (strcmp(a[row_number].unit_type, "B") == 0)
             {
                 //printf("Damage dealt: %d \n", attacker[vs_B]);
-                a[target_id].current_stamina -= attacker[vs_B];
+                a[row_number].current_stamina -= attacker[vs_B];
             }
             
-            if ((strcmp(a[target_id].unit_type, "B") == 0) && a[target_id].current_stamina <= 0)
+            if ((strcmp(a[row_number].unit_type, "B") == 0) && a[target_id].current_stamina <= 0)
             {
-                if (strcmp(a[target_id].affiliation, "P") == 0)
+                if (strcmp(a[row_number].affiliation, "P") == 0)
                 {
-                    printf("Player 1 loses the base, game over.\n");
+                    printf("\nPlayer 1 loses the base, game over.\n");
                     exit(0);
                 }
                     //strcpy(message, "Player 1");
-                if (strcmp(a[target_id].affiliation, "E") == 0)
+                if (strcmp(a[row_number].affiliation, "E") == 0)
                 {
-                    printf("Player 2 loses the base, game over.\n");
+                    printf("\nPlayer 2 loses the base, game over.\n");
                     exit(0);
                 }
                     //strcpy(message, "Player 2");
             }
 
-            if (a[target_id].current_stamina <= 0)
+            if (a[row_number].current_stamina <= 0)
             {
-                a[target_id].current_stamina = -1;
+                a[row_number].current_stamina = -1;
                 //printf("Unit %d defeated by unit %d.\n", target_id, id);
             }
             //a[target_id].current_stamina -= attacker[versus];
             //printf("%s %s %d %d %d %d\n", a[target_id].affiliation, a[target_id].unit_type, a[target_id].unit_id, a[target_id].x_coord, a[target_id].y_coord, a[target_id].current_stamina);
         }    
         
-        printf("Po walkach\n");
+        //printf("Po walkach\n");
 
         //letters = 0;
         //spaces = 0;
-        count++;
+        //count++;
     }
-    printf("Count: %d\n", count);
+    //printf("Count: %d\n", count);
 
     fclose(fptr1);
 
@@ -315,15 +353,15 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
     {
         fprintf(stderr, "unable to write bank status\n");
     }
-    printf("Gold saved.\n");
+    //printf("Gold saved.\n");
 
     /* Save base and unit data */
     for (int j = 0; j < *u; j++)
     {
-        printf("Wchodzę do pętli\n");
+        //printf("Wchodzę do pętli\n");
         if (a[j].current_stamina == -1)
         {
-            printf("Przeskok.\n");
+            //printf("Przeskok.\n");
             continue;
         }
 
@@ -333,7 +371,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
             {
                 fprintf(stderr, "unable to write base data\n");
             }
-            printf("Base saved.\n");
+            //printf("Base saved.\n");
         }
         else if (strcmp(a[j].unit_type, "B") != 0)
         {
@@ -341,9 +379,9 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
             {
                 fprintf(stderr, "unable to write unit data\n");
             }
-            printf("Units saved.\n");
+            //printf("Units saved.\n");
         }
     }
-    printf("Po zapisie do status.txt.\n");
+    //printf("Po zapisie do status.txt.\n");
     fclose(fptr2);
 }
