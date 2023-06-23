@@ -322,6 +322,7 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
     {
         if (a[i].current_stamina == -1)
         {
+            printf("Przeskok.\n");
             continue;
         }
         if (strcmp(a[i].unit_type, "B") == 0)
@@ -330,15 +331,17 @@ void load_orders(char fname[], au a[], char fname1[], char fname2[], int *u)
             {
                 fprintf(stderr, "unable to write base data\n");
             }
+            printf("Base saved.\n");
         }
-        else
+        else if (strcmp(a[i].unit_type, "B") != 0)
         {
             if (fprintf(fptr2, "%s %s %d %d %d %d\n", a[i].affiliation, a[i].unit_type, a[i].unit_id, a[i].x_coord, a[i].y_coord, a[i].current_stamina) < 0)
             {
                 fprintf(stderr, "unable to write unit data\n");
             }
+            printf("Units saved.\n");
         }
     }
-    printf("Units saved.\n");
+    printf("Po zapisie do status.txt.\n");
     fclose(fptr2);
 }
